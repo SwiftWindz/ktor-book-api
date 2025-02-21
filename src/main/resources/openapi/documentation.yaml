@@ -1,0 +1,93 @@
+openapi: "3.0.3"
+info:
+  title: "Book API"
+  description: "Book API"
+  version: "1.0.0"
+servers:
+  - url: "http://0.0.0.0:8080"
+paths:
+  /:
+    get:
+      description: "Hello World!"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Hello World!"
+
+  /books:
+    post:
+      description: "Creates a book"
+      responses:
+        "200":
+          description: "OK"
+      requestBody:
+        description: "Book object"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                isbn:
+                  type: integer
+                  description: "ISBN"
+                title:
+                  type: string
+                  description: "Title"
+                author:
+                  type: string
+                  description: "Author"
+                edition:
+                  type: integer
+                  description: "Book edition"
+              required:
+                - title
+                - author
+
+    get:
+      description: "Creates a book"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        404:
+          description: "Book not found"
+        "200":
+          description: "OK"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: {
+                    brandName: "Test book",
+                    model: "Test book",
+                    number: "Test book",
+                  }
+    put:
+      description: "Updates a book"
+      responses:
+        404:
+          description: "Book not found"
+        "200":
+          description: "OK"
+    delete:
+      description: "Deletes a book"
+      responses:
+        404:
+          description: "Book not found"
+        "200":
+          description: "OK"
+
+components:
+  schemas: {}

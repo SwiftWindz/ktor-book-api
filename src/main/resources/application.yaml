@@ -1,0 +1,15 @@
+ktor:
+    application:
+        modules:
+            - com.example.ApplicationKt.module
+    deployment:
+        port: 8080
+db:
+    mongo:
+        user: "admin"
+        password: "admin"
+        host: "0.0.0.0"
+        port: "27017"
+        maxPoolSize: "100"
+        database:
+            name: "books"

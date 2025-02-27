@@ -3,91 +3,258 @@ info:
   title: "Book API"
   description: "Book API"
   version: "1.0.0"
+
 servers:
   - url: "http://0.0.0.0:8080"
+
+tags:
+  - name: "Root"
+    description: "Root endpoint for the application"
+  - name: "Books"
+    description: "Operations related to books"
+  - name: "Authors"
+    description: "Operations related to authors"
+
 paths:
   /:
     get:
-      description: "Hello World!"
+      tags:
+        - "Root"
+      description: "Book Central!"
       responses:
         "200":
           description: "OK"
           content:
             text/plain:
               schema:
-                type: "string"
+                type: string
               examples:
                 Example#1:
-                  value: "Hello World!"
+                  value: "Book Central"
 
-  /books:
+  /book:
     post:
-      description: "Creates a book"
-      responses:
-        "200":
-          description: "OK"
+      tags:
+        - "Books"
+      summary: "Create a book"
+      description: "Creates a new book and returns its generated ID."
       requestBody:
-        description: "Book object"
         required: true
+        description: "Book object to create"
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                isbn:
-                  type: integer
-                  description: "ISBN"
-                title:
-                  type: string
-                  description: "Title"
-                author:
-                  type: string
-                  description: "Author"
-                edition:
-                  type: integer
-                  description: "Book edition"
-              required:
-                - title
-                - author
+              $ref: '#/components/schemas/Book'
+      responses:
+        "201":
+          description: "Book created successfully"
+          content:
+            text/plain:
+              schema:
+                type: string
+              examples:
+                ExampleID:
+                  value: "507f191e810c19729de860ea"
+        "400":
+          description: "Bad Request"
 
+  /book/{id}:
     get:
-      description: "Creates a book"
+      tags:
+        - "Books"
+      summary: "Read a book"
+      description: "Retrieves a book by its ID."
       parameters:
         - name: id
           in: path
+          description: "ID of the book to retrieve"
           required: true
           schema:
             type: string
       responses:
-        404:
-          description: "Book not found"
         "200":
           description: "OK"
           content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+              examples:
+                ExampleBook:
+                  value:
+                    isbn: 123456789
+                    title: "Test Title"
+                    author: "Test Author"
+                    edition: 1
+        "404":
+          description: "Book not found"
+    put:
+      tags:
+        - "Books"
+      summary: "Update a book"
+      description: "Updates an existing book."
+      parameters:
+        - name: id
+          in: path
+          description: "ID of the book to update"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        description: "Updated book data"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        "200":
+          description: "Book updated successfully"
+        "404":
+          description: "Book not found"
+    delete:
+      tags:
+        - "Books"
+      summary: "Delete a book"
+      description: "Removes a book by its ID."
+      parameters:
+        - name: id
+          in: path
+          description: "ID of the book to delete"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "Book deleted successfully"
+        "404":
+          description: "Book not found"
+
+  /author:
+    post:
+      tags:
+        - "Authors"
+      summary: "Create an author"
+      description: "Creates a new author and returns its generated ID."
+      requestBody:
+        required: true
+        description: "Author object to create"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Author'
+      responses:
+        "201":
+          description: "Author created successfully"
+          content:
             text/plain:
               schema:
-                type: "string"
+                type: string
               examples:
-                Example#1:
-                  value: {
-                    brandName: "Test book",
-                    model: "Test book",
-                    number: "Test book",
-                  }
+                ExampleID:
+                  value: "507f191e810c19729de860ea"
+        "400":
+          description: "Bad Request"
+
+  /author/{id}:
+    get:
+      tags:
+        - "Authors"
+      summary: "Read an author"
+      description: "Retrieves an author by its ID."
+      parameters:
+        - name: id
+          in: path
+          description: "ID of the author to retrieve"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+              examples:
+                ExampleAuthor:
+                  value:
+                    firstName: "John"
+                    lastName: "Doe"
+        "404":
+          description: "Author not found"
     put:
-      description: "Updates a book"
+      tags:
+        - "Authors"
+      summary: "Update an author"
+      description: "Updates an existing author."
+      parameters:
+        - name: id
+          in: path
+          description: "ID of the author to update"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        description: "Updated author data"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Author'
       responses:
-        404:
-          description: "Book not found"
         "200":
-          description: "OK"
+          description: "Author updated successfully"
+        "404":
+          description: "Author not found"
     delete:
-      description: "Deletes a book"
+      tags:
+        - "Authors"
+      summary: "Delete an author"
+      description: "Removes an author by its ID."
+      parameters:
+        - name: id
+          in: path
+          description: "ID of the author to delete"
+          required: true
+          schema:
+            type: string
       responses:
-        404:
-          description: "Book not found"
         "200":
-          description: "OK"
+          description: "Author deleted successfully"
+        "404":
+          description: "Author not found"
 
 components:
-  schemas: {}
+  schemas:
+    Book:
+      type: object
+      properties:
+        isbn:
+          type: integer
+          description: "ISBN of the book"
+        title:
+          type: string
+          description: "Title of the book"
+        author:
+          type: string
+          description: "Author of the book"
+        edition:
+          type: integer
+          description: "Edition of the book"
+      required:
+        - isbn
+        - title
+        - author
+        - edition
+    Author:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: "Author's first name"
+        lastName:
+          type: string
+          description: "Author's last name"
+      required:
+        - firstName
+        - lastName

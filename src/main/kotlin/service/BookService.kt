@@ -1,6 +1,6 @@
 package com.example.service
 
-import com.example.model.Book
+import com.example.models.Book
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
 import com.mongodb.client.model.Filters
@@ -10,11 +10,11 @@ import org.bson.Document
 import org.bson.types.ObjectId
 
 class BookService(private val database: MongoDatabase) {
-    var collection: MongoCollection<Document>
+    private var collection: MongoCollection<Document>
 
     init {
-        database.createCollection("book")
-        collection = database.getCollection("book")
+        database.createCollection("books")
+        collection = database.getCollection("books")
     }
 
     // Create new Book

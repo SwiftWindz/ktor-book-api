@@ -8,7 +8,7 @@ import org.bson.Document
 @Serializable
 data class Book(
     val isbn: Int,
-    val author: Author,
+    val authorID: String,
     val title: String,
     val edition: Int
 ) {

@@ -235,9 +235,9 @@ components:
         title:
           type: string
           description: "Title of the book"
-        author:
+        authorID:
           type: string
-          description: "Author of the book"
+          description: "Mongo object id for author"
         edition:
           type: integer
           description: "Edition of the book"

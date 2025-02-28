@@ -2,6 +2,7 @@ package com.example.routes.bookRoutes
 
 import com.example.models.Book
 import com.example.db.connectToMongoDB
+import com.example.service.AuthorService
 import com.example.service.BookService
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -9,14 +10,25 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-
 fun Application.configureRoutingBooks() {
     val mongoDatabase = connectToMongoDB()
     val bookService = BookService(mongoDatabase)
+    val authorService = AuthorService(mongoDatabase)
+
     routing {
         // Create book
         post("/book") {
             val book = call.receive<Book>()
+            try {
+                val existingAuthor = authorService.read(book.authorID)
+                if (existingAuthor == null) {
+                    call.respond(HttpStatusCode.BadRequest, "Author not found")
+                    return@post
+                }
+            } catch (e: IllegalArgumentException) {
+                call.respond(HttpStatusCode.BadRequest, "Invalid author ID format")
+                return@post
+            }
             val id = bookService.create(book)
             call.respond(HttpStatusCode.Created, id)
         }
